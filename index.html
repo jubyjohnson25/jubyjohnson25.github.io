@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Code Examples — Infineon Developer Zone</title>
 <style>
-/* ── Reset & Base ──────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -63,7 +62,6 @@ header {
   align-items: center;
   justify-content: center;
 }
-
 .logo-mark svg { fill: white; }
 
 .logo-text {
@@ -122,9 +120,9 @@ header {
 /* ── Page layout ──────────────────────────────────── */
 .page {
   display: grid;
-  grid-template-columns: 232px 1fr;
+  grid-template-columns: 280px 1fr;
   gap: 0;
-  max-width: 1280px;
+  max-width: 1440px;
   margin: 0 auto;
   min-height: calc(100vh - 56px);
 }
@@ -133,7 +131,7 @@ header {
 aside {
   background: var(--white);
   border-right: 1px solid var(--border);
-  padding: 20px 0;
+  padding: 12px 0;
   position: sticky;
   top: 56px;
   height: calc(100vh - 56px);
@@ -141,9 +139,8 @@ aside {
 }
 
 .sidebar-section {
-  padding: 0 16px 16px;
+  padding: 0 14px 14px;
   border-bottom: 1px solid var(--border);
-  margin-bottom: 0;
 }
 .sidebar-section:last-child { border-bottom: none; }
 
@@ -151,13 +148,14 @@ aside {
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
   color: var(--text-lt);
-  padding: 12px 0 8px;
+  padding: 10px 0 6px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 .sidebar-label button {
   font-size: 10px;
   font-weight: 600;
@@ -171,16 +169,45 @@ aside {
 }
 .sidebar-label button.visible { display: block; }
 
+.level-row {
+  margin-bottom: 6px;
+}
+.level-row label {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-lt);
+  margin-bottom: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.level-row select {
+  width: 100%;
+  font-size: 12px;
+  font-family: inherit;
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: white;
+  color: var(--text);
+  outline: none;
+  cursor: pointer;
+}
+.level-row select:focus { border-color: var(--green); }
+.level-row select:disabled { background: var(--bg); color: var(--text-lt); cursor: default; }
+
+/* Language checkboxes */
 .filter-list { list-style: none; display: flex; flex-direction: column; gap: 1px; }
+.filter-list-scroll { max-height: 160px; overflow-y: auto; }
 
 .filter-item label {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 5px 4px;
+  padding: 4px 4px;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text);
   transition: background 0.1s;
   user-select: none;
@@ -189,8 +216,8 @@ aside {
 .filter-item input[type="checkbox"] { display: none; }
 
 .checkmark {
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
   border: 1.5px solid var(--border);
   border-radius: 3px;
   flex-shrink: 0;
@@ -207,25 +234,16 @@ aside {
 .filter-item input:checked + label .checkmark::after {
   content: '';
   display: block;
-  width: 9px;
-  height: 5px;
+  width: 8px;
+  height: 4px;
   border-left: 2px solid white;
   border-bottom: 2px solid white;
   transform: rotate(-45deg) translate(1px, -1px);
 }
 .filter-item input:checked + label { color: var(--green-dk); font-weight: 500; }
 
-.filter-count {
-  margin-left: auto;
-  font-size: 11px;
-  color: var(--text-lt);
-  font-weight: 400;
-}
-
 /* ── Main content ─────────────────────────────────── */
-main {
-  padding: 20px 28px 40px;
-}
+main { padding: 20px 28px 40px; }
 
 /* Active filters row */
 .active-filters {
@@ -233,8 +251,8 @@ main {
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
-  min-height: 32px;
-  margin-bottom: 16px;
+  min-height: 28px;
+  margin-bottom: 12px;
 }
 
 .filter-chip {
@@ -245,7 +263,7 @@ main {
   background: var(--green-lt);
   border: 1px solid #b2ddc4;
   border-radius: 20px;
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 500;
   color: var(--green-dk);
 }
@@ -263,7 +281,7 @@ main {
 .filter-chip .chip-remove:hover { opacity: 1; }
 
 .clear-all {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--text-lt);
   background: none;
@@ -279,18 +297,32 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 8px;
 }
-.toolbar-left {
-  font-size: 13px;
-  color: var(--text-mid);
-}
+.toolbar-left { font-size: 13px; color: var(--text-mid); }
 .toolbar-left strong { color: var(--text); }
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.toolbar-right label {
+  font-size: 12px;
+  color: var(--text-lt);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+#hideArchived { accent-color: var(--green); }
 
 .sort-wrap {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 .sort-wrap label { font-size: 12px; color: var(--text-lt); }
 .sort-wrap select {
@@ -304,40 +336,36 @@ main {
   outline: none;
   cursor: pointer;
 }
-.sort-wrap select:focus { border-color: var(--green); }
 
 /* Result grid */
 .results {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 12px;
 }
 
-/* Result card */
+/* Card */
 .card {
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 16px;
+  padding: 14px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 .card:hover {
   border-color: #b0d4be;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
+.card.archived { opacity: 0.55; }
 
-.card-top {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-}
+.card-top { display: flex; align-items: flex-start; gap: 10px; }
 
 .card-icon {
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   border-radius: 5px;
   background: var(--bg);
   border: 1px solid var(--border);
@@ -345,7 +373,7 @@ main {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .card-title-wrap { flex: 1; min-width: 0; }
@@ -359,12 +387,7 @@ main {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
-.card-org {
-  font-size: 11px;
-  color: var(--text-lt);
-  margin-top: 1px;
-}
+.card-org { font-size: 11px; color: var(--text-lt); margin-top: 1px; }
 
 .card-desc {
   font-size: 12px;
@@ -376,23 +399,18 @@ main {
   overflow: hidden;
 }
 
-.card-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-}
+.card-tags { display: flex; flex-wrap: wrap; gap: 4px; }
 
 .tag {
-  font-size: 10.5px;
-  padding: 2px 8px;
+  font-size: 10px;
+  padding: 2px 7px;
   border-radius: 3px;
   font-weight: 500;
   line-height: 1.6;
 }
-.tag-app      { background: #eef2ff; color: #3730a3; }
-.tag-product  { background: #fef3c7; color: #92400e; }
-.tag-board    { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
-.tag-lang     { background: var(--tag-bg); color: var(--text-mid); }
+.tag-app     { background: #eef2ff; color: #3730a3; }
+.tag-product { background: #fef3c7; color: #92400e; }
+.tag-lang    { background: var(--tag-bg); color: var(--text-mid); }
 
 .card-footer {
   display: flex;
@@ -406,14 +424,14 @@ main {
 .card-meta {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   font-size: 11px;
   color: var(--text-lt);
 }
 .card-meta span { display: flex; align-items: center; gap: 3px; }
 
 .btn-github {
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--text-mid);
   background: var(--bg);
@@ -431,7 +449,26 @@ main {
   color: white;
 }
 
-/* No results */
+/* Pagination */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+.pagination button {
+  font-size: 12px;
+  padding: 5px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--white);
+  color: var(--text);
+}
+.pagination button:hover:not(:disabled) { border-color: var(--green); color: var(--green); }
+.pagination button:disabled { opacity: 0.4; cursor: default; }
+.pagination .page-info { font-size: 12px; color: var(--text-lt); }
+
 .no-results {
   grid-column: 1 / -1;
   text-align: center;
@@ -439,61 +476,91 @@ main {
   color: var(--text-lt);
 }
 .no-results h3 { font-size: 16px; color: var(--text-mid); margin-bottom: 6px; }
-.no-results p { font-size: 13px; }
 
-/* ── Scrollbar ─────────────────────────────────────── */
-::-webkit-scrollbar { width: 6px; height: 6px; }
+.loading {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--text-lt);
+}
+
+::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #d0d0d0; border-radius: 3px; }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header>
   <div class="logo">
     <div class="logo-mark">
-      <svg width="16" height="16" viewBox="0 0 16 16">
-        <circle cx="8" cy="8" r="7"/>
-      </svg>
+      <svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7"/></svg>
     </div>
     <div class="logo-text">Developer Zone<br><span>Code Examples</span></div>
   </div>
   <div class="header-divider"></div>
   <div class="search-wrap">
-    <span class="search-icon">⌕</span>
+    <span class="search-icon">&#x2315;</span>
     <input type="text" id="searchInput" placeholder="Search examples, devices, peripherals…" autocomplete="off">
   </div>
   <div class="result-count-header" id="headerCount">Loading…</div>
 </header>
 
 <div class="page">
-
-  <!-- SIDEBAR FILTERS -->
+  <!-- SIDEBAR -->
   <aside>
 
+    <!-- APPLICATION LEVELS -->
     <div class="sidebar-section">
       <div class="sidebar-label">
         Application
-        <button id="clearApp" onclick="clearGroup('app')">Clear</button>
+        <button id="clearApps" onclick="clearHierarchy('app')">Clear</button>
       </div>
-      <ul class="filter-list" id="filter-app"></ul>
+      <div class="level-row">
+        <label>Level 1 — Segment</label>
+        <select id="app-l1" onchange="onLevelChange('app',1)"><option value="">All</option></select>
+      </div>
+      <div class="level-row">
+        <label>Level 2 — Sub-Application</label>
+        <select id="app-l2" onchange="onLevelChange('app',2)" disabled><option value="">All</option></select>
+      </div>
+      <div class="level-row">
+        <label>Level 3 — Function</label>
+        <select id="app-l3" onchange="onLevelChange('app',3)" disabled><option value="">All</option></select>
+      </div>
     </div>
 
+    <!-- PRODUCT LEVELS -->
     <div class="sidebar-section">
       <div class="sidebar-label">
         Product Family
-        <button id="clearProduct" onclick="clearGroup('product')">Clear</button>
+        <button id="clearProducts" onclick="clearHierarchy('prod')">Clear</button>
       </div>
-      <ul class="filter-list" id="filter-product"></ul>
+      <div class="level-row">
+        <label>Level 1 — Category</label>
+        <select id="prod-l1" onchange="onLevelChange('prod',1)"><option value="">All</option></select>
+      </div>
+      <div class="level-row">
+        <label>Level 2 — Family</label>
+        <select id="prod-l2" onchange="onLevelChange('prod',2)" disabled><option value="">All</option></select>
+      </div>
+      <div class="level-row">
+        <label>Level 3 — Sub-Family</label>
+        <select id="prod-l3" onchange="onLevelChange('prod',3)" disabled><option value="">All</option></select>
+      </div>
+      <div class="level-row">
+        <label>Level 4 — Device</label>
+        <select id="prod-l4" onchange="onLevelChange('prod',4)" disabled><option value="">All</option></select>
+      </div>
     </div>
 
+    <!-- LANGUAGE -->
     <div class="sidebar-section">
       <div class="sidebar-label">
-        Board / Kit
-        <button id="clearBoard" onclick="clearGroup('board')">Clear</button>
+        Language
+        <button id="clearLang" onclick="clearLang()">Clear</button>
       </div>
-      <ul class="filter-list" id="filter-board"></ul>
+      <ul class="filter-list filter-list-scroll" id="filter-lang"></ul>
     </div>
 
   </aside>
@@ -503,369 +570,228 @@ main {
     <div class="active-filters" id="activeFilters"></div>
     <div class="toolbar">
       <div class="toolbar-left" id="resultLabel">Loading…</div>
-      <div class="sort-wrap">
-        <label for="sortSelect">Sort by</label>
-        <select id="sortSelect" onchange="render()">
-          <option value="relevance">Relevance</option>
-          <option value="updated">Last updated</option>
-          <option value="stars">Most starred</option>
-          <option value="az">Name A–Z</option>
-        </select>
+      <div class="toolbar-right">
+        <label><input type="checkbox" id="hideArchived" checked onchange="currentPage=1;render()"> Hide archived</label>
+        <div class="sort-wrap">
+          <label for="sortSelect">Sort</label>
+          <select id="sortSelect" onchange="render()">
+            <option value="stars">Stars</option>
+            <option value="updated">Updated</option>
+            <option value="az">A–Z</option>
+          </select>
+        </div>
       </div>
     </div>
-    <div class="results" id="results"></div>
+    <div class="results" id="results"><div class="loading">Loading repository data…</div></div>
+    <div class="pagination" id="pagination"></div>
   </main>
-
 </div>
 
 <script>
-// ── DATA ──────────────────────────────────────────────────────────────
-const repos = [
-  {
-    id: 1,
-    name: "mtb-example-psoc6-motor-foc",
-    org: "Infineon",
-    desc: "Field-oriented control for BLDC/PMSM motors using PSoC 6 with hardware FOC acceleration.",
-    app: "Motor Control",
-    product: "PSoC 6",
-    board: "CY8CKIT-062S2",
-    lang: "C",
-    stars: 134,
-    updated: "2026-04-22",
-    icon: "⚙"
-  },
-  {
-    id: 2,
-    name: "mtb-example-xmc-bldc-trap",
-    org: "Infineon",
-    desc: "Trapezoidal commutation for BLDC motor using XMC1300 with POSIF and CCU8.",
-    app: "Motor Control",
-    product: "XMC1000",
-    board: "KIT_XMC13_BOOT_001",
-    lang: "C",
-    stars: 87,
-    updated: "2026-03-10",
-    icon: "⚙"
-  },
-  {
-    id: 3,
-    name: "mtb-example-psoc-control-gate-drive",
-    org: "Infineon",
-    desc: "Three-phase gate drive control for PSOC Control with dead-time insertion and fault handling.",
-    app: "Motor Control",
-    product: "PSoC Control",
-    board: "KIT_PSoC_Control_PRIM",
-    lang: "C",
-    stars: 62,
-    updated: "2026-05-01",
-    icon: "⚙"
-  },
-  {
-    id: 4,
-    name: "mtb-example-psoc6-bms-cell-balancing",
-    org: "Infineon",
-    desc: "Passive cell balancing for 12S Li-ion pack using TLE9012 battery monitoring IC.",
-    app: "Battery Management",
-    product: "PSoC 6",
-    board: "CY8CKIT-062-BLE",
-    lang: "C",
-    stars: 211,
-    updated: "2026-04-05",
-    icon: "🔋"
-  },
-  {
-    id: 5,
-    name: "mtb-example-aurix-bms-soa",
-    org: "Infineon",
-    desc: "State-of-charge and safe operating area monitoring on AURIX TC375 with functional safety hooks.",
-    app: "Battery Management",
-    product: "AURIX TC3xx",
-    board: "AURIX TC375 Lite Kit",
-    lang: "C",
-    stars: 98,
-    updated: "2026-02-18",
-    icon: "🔋"
-  },
-  {
-    id: 6,
-    name: "mtb-example-psoc6-ev-charger-pfc",
-    org: "Infineon",
-    desc: "AC–DC power factor correction stage for OBC using PSoC 6 and XDPPFC controller.",
-    app: "EV Charging",
-    product: "PSoC 6",
-    board: "CY8CPROTO-062-4343W",
-    lang: "C",
-    stars: 143,
-    updated: "2026-05-10",
-    icon: "⚡"
-  },
-  {
-    id: 7,
-    name: "mtb-example-aurix-dcdc-llc",
-    org: "Infineon",
-    desc: "LLC resonant DC–DC converter digital control on AURIX TC3xx for EV on-board charger.",
-    app: "EV Charging",
-    product: "AURIX TC3xx",
-    board: "AURIX TC397 TFT Board",
-    lang: "C",
-    stars: 77,
-    updated: "2026-03-29",
-    icon: "⚡"
-  },
-  {
-    id: 8,
-    name: "mtb-example-xmc4-smps-buck",
-    org: "Infineon",
-    desc: "Synchronous buck converter with digital voltage-mode control using XMC4200.",
-    app: "Power Management",
-    product: "XMC4000",
-    board: "KIT_XMC42_RELAX",
-    lang: "C",
-    stars: 55,
-    updated: "2026-01-14",
-    icon: "🔌"
-  },
-  {
-    id: 9,
-    name: "mtb-example-psoc6-iot-sensor-hub",
-    org: "Infineon",
-    desc: "Multi-sensor data aggregation over BLE and MQTT using PSoC 6 with OPTIGA Trust.",
-    app: "Industrial IoT",
-    product: "PSoC 6",
-    board: "CY8CKIT-062S2-43012",
-    lang: "C",
-    stars: 302,
-    updated: "2026-04-30",
-    icon: "📡"
-  },
-  {
-    id: 10,
-    name: "mtb-example-xmc4-canfd-gateway",
-    org: "Infineon",
-    desc: "CAN FD gateway bridging two buses with message filtering on XMC4700 Relax Kit.",
-    app: "Industrial IoT",
-    product: "XMC4000",
-    board: "KIT_XMC47_RELAX",
-    lang: "C",
-    stars: 66,
-    updated: "2026-03-08",
-    icon: "📡"
-  },
-  {
-    id: 11,
-    name: "mtb-example-psoc6-hv-led-driver",
-    org: "Infineon",
-    desc: "High-voltage LED driver with analog dimming and OTP protection using PSoC 6.",
-    app: "Smart Lighting",
-    product: "PSoC 6",
-    board: "CY8CKIT-062-WIFI-BT",
-    lang: "C",
-    stars: 41,
-    updated: "2025-12-02",
-    icon: "💡"
-  },
-  {
-    id: 12,
-    name: "mtb-example-xmc1-rgb-dali",
-    org: "Infineon",
-    desc: "DALI2 protocol implementation for RGB LED control on XMC1302 with PWM mixing.",
-    app: "Smart Lighting",
-    product: "XMC1000",
-    board: "KIT_XMC13_BOOT_001",
-    lang: "C",
-    stars: 33,
-    updated: "2025-11-20",
-    icon: "💡"
-  },
-  {
-    id: 13,
-    name: "mtb-example-psoc-control-pmsm-sensorless",
-    org: "Infineon",
-    desc: "Sensorless PMSM control using sliding-mode observer on PSoC Control with IRIS-generated init code.",
-    app: "Motor Control",
-    product: "PSoC Control",
-    board: "KIT_PSoC_Control_PRIM",
-    lang: "C",
-    stars: 189,
-    updated: "2026-05-08",
-    icon: "⚙"
-  },
-  {
-    id: 14,
-    name: "mtb-example-aurix-functional-safety",
-    org: "Infineon",
-    desc: "ISO 26262 ASIL-D runtime monitors: lockstep CPU check, SRAMtest, and watchdog configuration.",
-    app: "Functional Safety",
-    product: "AURIX TC3xx",
-    board: "AURIX TC375 Lite Kit",
-    lang: "C",
-    stars: 158,
-    updated: "2026-04-11",
-    icon: "🛡"
-  },
-  {
-    id: 15,
-    name: "mtb-example-xmc4-encoder-abs",
-    org: "Infineon",
-    desc: "Absolute encoder interface (SSI/BiSS-C) with position reconstruction for servo drives.",
-    app: "Motor Control",
-    product: "XMC4000",
-    board: "KIT_XMC48_RELAX",
-    lang: "C",
-    stars: 74,
-    updated: "2026-02-27",
-    icon: "⚙"
-  },
-  {
-    id: 16,
-    name: "mtb-example-psoc6-power-profiler",
-    org: "Infineon",
-    desc: "Low-power profiling framework using SAR ADC current sensing and Energy Profiler integration.",
-    app: "Power Management",
-    product: "PSoC 6",
-    board: "CY8CKIT-062S2",
-    lang: "C",
-    stars: 127,
-    updated: "2026-03-15",
-    icon: "🔌"
-  },
-  {
-    id: 17,
-    name: "mtb-example-aurix-lidar-processing",
-    org: "Infineon",
-    desc: "Point-cloud pre-processing pipeline on AURIX TC3xx for automotive LiDAR sensor fusion.",
-    app: "Automotive Sensing",
-    product: "AURIX TC3xx",
-    board: "AURIX TC397 TFT Board",
-    lang: "C",
-    stars: 93,
-    updated: "2026-04-17",
-    icon: "🚗"
-  },
-  {
-    id: 18,
-    name: "mtb-example-xmc4-ethercat-ds402",
-    org: "Infineon",
-    desc: "EtherCAT DS402 motor profile over SOES stack on XMC4800 for factory automation.",
-    app: "Industrial IoT",
-    product: "XMC4000",
-    board: "KIT_XMC48_RELAX",
-    lang: "C",
-    stars: 112,
-    updated: "2026-01-30",
-    icon: "📡"
-  }
-];
+// ── STATE ─────────────────────────────────────────────
+let repos = [];
+let currentPage = 1;
+const PAGE_SIZE = 30;
 
-// ── FILTER METADATA ──────────────────────────────────────────────────
-const filterGroups = {
-  app:     [...new Set(repos.map(r => r.app))].sort(),
-  product: [...new Set(repos.map(r => r.product))].sort(),
-  board:   [...new Set(repos.map(r => r.board))].sort()
-};
-
-let activeFilters = { app: new Set(), product: new Set(), board: new Set() };
+// Hierarchical filter state: selected value at each level (null = all)
+let appFilter  = [null, null, null];       // 3 levels
+let prodFilter = [null, null, null, null]; // 4 levels
+let langFilter = new Set();
 let searchQuery = "";
 
-// ── COUNT PER FILTER ──────────────────────────────────────────────────
-function countForValue(group, value) {
-  const otherActive = {
-    app:     group === 'app'     ? activeFilters.app     : new Set([...activeFilters.app]),
-    product: group === 'product' ? activeFilters.product : new Set([...activeFilters.product]),
-    board:   group === 'board'   ? activeFilters.board   : new Set([...activeFilters.board]),
-  };
-  // temporarily pretend this value is selected in its group
-  const testFilters = {
-    app:     group === 'app'     ? new Set([value]) : activeFilters.app,
-    product: group === 'product' ? new Set([value]) : activeFilters.product,
-    board:   group === 'board'   ? new Set([value]) : activeFilters.board,
-  };
-  return filtered(testFilters).length;
-}
+// ── LOAD DATA ─────────────────────────────────────────
+fetch('repos.json')
+  .then(r => r.json())
+  .then(data => {
+    repos = data;
+    initFilters();
+    render();
+  })
+  .catch(err => {
+    document.getElementById('results').innerHTML =
+      `<div class="no-results"><h3>Failed to load data</h3><p>${err.message}</p></div>`;
+  });
 
-// ── BUILD SIDEBAR ──────────────────────────────────────────────────────
-function buildSidebar() {
-  ['app', 'product', 'board'].forEach(group => {
-    const ul = document.getElementById(`filter-${group}`);
-    ul.innerHTML = '';
-    filterGroups[group].forEach(val => {
-      const count = countForValue(group, val);
-      const checked = activeFilters[group].has(val);
-      const li = document.createElement('li');
-      li.className = 'filter-item';
-      li.innerHTML = `
-        <input type="checkbox" id="f_${group}_${val.replace(/\s/g,'_')}" ${checked ? 'checked' : ''}>
-        <label for="f_${group}_${val.replace(/\s/g,'_')}">
-          <span class="checkmark"></span>
-          ${val}
-          <span class="filter-count">${count}</span>
-        </label>
-      `;
-      li.querySelector('input').addEventListener('change', e => {
-        if (e.target.checked) activeFilters[group].add(val);
-        else activeFilters[group].delete(val);
-        updateClearButtons();
-        render();
-        buildSidebar(); // update counts
-      });
-      ul.appendChild(li);
+// ── HIERARCHY HELPERS ─────────────────────────────────
+function getUniqueAtLevel(field, level, parentSelections) {
+  const vals = new Set();
+  repos.forEach(r => {
+    r[field].forEach(path => {
+      if (path.length <= level) return;
+      let match = true;
+      for (let i = 0; i < level; i++) {
+        if (parentSelections[i] && path.length > i && path[i] !== parentSelections[i]) {
+          match = false;
+          break;
+        }
+      }
+      if (match) vals.add(path[level]);
     });
   });
+  return [...vals].sort();
+}
+
+function populateSelect(id, options, selected) {
+  const sel = document.getElementById(id);
+  sel.innerHTML = '<option value="">All</option>';
+  options.forEach(v => {
+    const opt = document.createElement('option');
+    opt.value = v;
+    opt.textContent = v;
+    if (v === selected) opt.selected = true;
+    sel.appendChild(opt);
+  });
+  sel.disabled = false;
+}
+
+function disableSelect(id) {
+  const sel = document.getElementById(id);
+  sel.innerHTML = '<option value="">All</option>';
+  sel.disabled = true;
+}
+
+// ── INIT FILTERS ──────────────────────────────────────
+function initFilters() {
+  populateSelect('app-l1', getUniqueAtLevel('apps', 0, []), null);
+  disableSelect('app-l2');
+  disableSelect('app-l3');
+
+  populateSelect('prod-l1', getUniqueAtLevel('products', 0, []), null);
+  disableSelect('prod-l2');
+  disableSelect('prod-l3');
+  disableSelect('prod-l4');
+
+  // Languages sorted by count
+  const langCount = {};
+  repos.forEach(r => { if (r.lang) langCount[r.lang] = (langCount[r.lang] || 0) + 1; });
+  const langs = Object.keys(langCount).sort((a, b) => langCount[b] - langCount[a]);
+  const ul = document.getElementById('filter-lang');
+  ul.innerHTML = '';
+  langs.forEach(lang => {
+    const li = document.createElement('li');
+    li.className = 'filter-item';
+    const id = 'lang_' + lang.replace(/[^a-zA-Z0-9]/g, '_');
+    li.innerHTML = `
+      <input type="checkbox" id="${id}">
+      <label for="${id}">
+        <span class="checkmark"></span>
+        ${lang} <span style="margin-left:auto;font-size:10px;color:var(--text-lt)">${langCount[lang]}</span>
+      </label>
+    `;
+    li.querySelector('input').addEventListener('change', e => {
+      if (e.target.checked) langFilter.add(lang);
+      else langFilter.delete(lang);
+      currentPage = 1;
+      updateClearButtons();
+      render();
+    });
+    ul.appendChild(li);
+  });
+
+  updateClearButtons();
+}
+
+// ── LEVEL CHANGE HANDLER ──────────────────────────────
+function onLevelChange(type, level) {
+  const prefix = type === 'app' ? 'app' : 'prod';
+  const field = type === 'app' ? 'apps' : 'products';
+  const filter = type === 'app' ? appFilter : prodFilter;
+  const maxLevel = type === 'app' ? 3 : 4;
+
+  const sel = document.getElementById(`${prefix}-l${level}`);
+  const val = sel.value || null;
+  filter[level - 1] = val;
+
+  // Clear deeper levels
+  for (let i = level; i < maxLevel; i++) {
+    filter[i] = null;
+    disableSelect(`${prefix}-l${i + 1}`);
+  }
+
+  // Populate next level if a value was selected
+  if (val && level < maxLevel) {
+    const parentSel = filter.slice(0, level);
+    const options = getUniqueAtLevel(field, level, parentSel);
+    if (options.length > 0) {
+      populateSelect(`${prefix}-l${level + 1}`, options, null);
+    }
+  }
+
+  currentPage = 1;
+  updateClearButtons();
+  render();
+}
+
+function clearHierarchy(type) {
+  if (type === 'app') {
+    appFilter = [null, null, null];
+    populateSelect('app-l1', getUniqueAtLevel('apps', 0, []), null);
+    disableSelect('app-l2');
+    disableSelect('app-l3');
+  } else {
+    prodFilter = [null, null, null, null];
+    populateSelect('prod-l1', getUniqueAtLevel('products', 0, []), null);
+    disableSelect('prod-l2');
+    disableSelect('prod-l3');
+    disableSelect('prod-l4');
+  }
+  currentPage = 1;
+  updateClearButtons();
+  render();
+}
+
+function clearLang() {
+  langFilter.clear();
+  document.querySelectorAll('#filter-lang input[type=checkbox]').forEach(cb => cb.checked = false);
+  currentPage = 1;
+  updateClearButtons();
+  render();
 }
 
 function updateClearButtons() {
-  ['app', 'product', 'board'].forEach(group => {
-    const btn = document.getElementById(`clear${group.charAt(0).toUpperCase() + group.slice(1)}`);
-    btn.classList.toggle('visible', activeFilters[group].size > 0);
-  });
+  document.getElementById('clearApps').classList.toggle('visible', appFilter.some(v => v));
+  document.getElementById('clearProducts').classList.toggle('visible', prodFilter.some(v => v));
+  document.getElementById('clearLang').classList.toggle('visible', langFilter.size > 0);
 }
 
-function clearGroup(group) {
-  activeFilters[group].clear();
-  updateClearButtons();
-  render();
-  buildSidebar();
-}
-
-// ── ACTIVE FILTER CHIPS ───────────────────────────────────────────────
-const groupLabels = { app: 'App', product: 'Product', board: 'Board' };
-
+// ── CHIPS ─────────────────────────────────────────────
 function renderChips() {
   const container = document.getElementById('activeFilters');
   container.innerHTML = '';
   let total = 0;
-  ['app', 'product', 'board'].forEach(group => {
-    activeFilters[group].forEach(val => {
-      total++;
-      const chip = document.createElement('div');
-      chip.className = 'filter-chip';
-      chip.innerHTML = `
-        <span style="font-size:10px;color:#888;margin-right:2px">${groupLabels[group]}</span>
-        ${val}
-        <button class="chip-remove" title="Remove">×</button>
-      `;
-      chip.querySelector('button').addEventListener('click', () => {
-        activeFilters[group].delete(val);
-        updateClearButtons();
-        render();
-        buildSidebar();
-      });
-      container.appendChild(chip);
-    });
+
+  const appActive = appFilter.filter(v => v);
+  if (appActive.length) {
+    total++;
+    container.appendChild(makeChip('App', appActive.join(' \u203a '), () => clearHierarchy('app')));
+  }
+
+  const prodActive = prodFilter.filter(v => v);
+  if (prodActive.length) {
+    total++;
+    container.appendChild(makeChip('Product', prodActive.join(' \u203a '), () => clearHierarchy('prod')));
+  }
+
+  langFilter.forEach(lang => {
+    total++;
+    container.appendChild(makeChip('Lang', lang, () => {
+      langFilter.delete(lang);
+      const cb = document.querySelector(`#lang_${lang.replace(/[^a-zA-Z0-9]/g, '_')}`);
+      if (cb) cb.checked = false;
+      currentPage = 1;
+      updateClearButtons();
+      render();
+    }));
   });
 
   if (searchQuery) {
-    const chip = document.createElement('div');
-    chip.className = 'filter-chip';
-    chip.innerHTML = `<span style="font-size:10px;color:#888;margin-right:2px">Search</span>"${searchQuery}" <button class="chip-remove" title="Remove">×</button>`;
-    chip.querySelector('button').addEventListener('click', () => {
+    total++;
+    container.appendChild(makeChip('Search', `"${searchQuery}"`, () => {
       searchQuery = '';
       document.getElementById('searchInput').value = '';
+      currentPage = 1;
       render();
-      buildSidebar();
-    });
-    container.appendChild(chip);
-    total++;
+    }));
   }
 
   if (total > 1) {
@@ -873,29 +799,46 @@ function renderChips() {
     btn.className = 'clear-all';
     btn.textContent = 'Clear all';
     btn.addEventListener('click', () => {
-      activeFilters = { app: new Set(), product: new Set(), board: new Set() };
+      clearHierarchy('app');
+      clearHierarchy('prod');
+      clearLang();
       searchQuery = '';
       document.getElementById('searchInput').value = '';
-      updateClearButtons();
       render();
-      buildSidebar();
     });
     container.appendChild(btn);
   }
 }
 
-// ── FILTER + SORT ─────────────────────────────────────────────────────
-function filtered(f = activeFilters) {
+function makeChip(label, text, onRemove) {
+  const chip = document.createElement('div');
+  chip.className = 'filter-chip';
+  chip.innerHTML = `<span style="font-size:10px;color:#888;margin-right:2px">${label}</span>${escapeHtml(text)}<button class="chip-remove">&times;</button>`;
+  chip.querySelector('button').addEventListener('click', onRemove);
+  return chip;
+}
+
+// ── FILTERING ─────────────────────────────────────────
+function matchesHierarchy(paths, filterArr) {
+  const activeLevels = [];
+  filterArr.forEach((v, i) => { if (v) activeLevels.push([i, v]); });
+  if (activeLevels.length === 0) return true;
+  return paths.some(path =>
+    activeLevels.every(([lvl, val]) => path.length > lvl && path[lvl] === val)
+  );
+}
+
+function filtered() {
+  const hideArch = document.getElementById('hideArchived').checked;
   return repos.filter(r => {
-    if (f.app.size     > 0 && !f.app.has(r.app))         return false;
-    if (f.product.size > 0 && !f.product.has(r.product)) return false;
-    if (f.board.size   > 0 && !f.board.has(r.board))     return false;
+    if (hideArch && r.archived) return false;
+    if (!matchesHierarchy(r.apps, appFilter)) return false;
+    if (!matchesHierarchy(r.products, prodFilter)) return false;
+    if (langFilter.size > 0 && !langFilter.has(r.lang)) return false;
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
-      if (!r.name.toLowerCase().includes(q) &&
-          !r.desc.toLowerCase().includes(q) &&
-          !r.app.toLowerCase().includes(q) &&
-          !r.product.toLowerCase().includes(q)) return false;
+      const haystack = `${r.name} ${r.desc} ${r.topics.join(' ')} ${r.products.map(p=>p.join(' ')).join(' ')} ${r.apps.map(a=>a.join(' ')).join(' ')}`.toLowerCase();
+      if (!haystack.includes(q)) return false;
     }
     return true;
   });
@@ -907,88 +850,107 @@ function sorted(arr) {
     if (by === 'stars')   return b.stars - a.stars;
     if (by === 'updated') return b.updated.localeCompare(a.updated);
     if (by === 'az')      return a.name.localeCompare(b.name);
-    return 0; // relevance = original order
+    return 0;
   });
 }
 
+// ── RENDER ────────────────────────────────────────────
+function render() {
+  renderChips();
+  const items = sorted(filtered());
+  const total = items.length;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  if (currentPage > totalPages) currentPage = totalPages;
+
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const pageItems = items.slice(start, start + PAGE_SIZE);
+  const container = document.getElementById('results');
+
+  document.getElementById('headerCount').textContent = `${total} example${total !== 1 ? 's' : ''}`;
+  document.getElementById('resultLabel').innerHTML = total === 0
+    ? 'No results'
+    : `Showing <strong>${start + 1}\u2013${start + pageItems.length}</strong> of ${total}`;
+
+  if (total === 0) {
+    container.innerHTML = `<div class="no-results"><h3>No examples match</h3><p>Try adjusting your filters or search term.</p></div>`;
+    document.getElementById('pagination').innerHTML = '';
+    return;
+  }
+
+  container.innerHTML = pageItems.map(r => {
+    const appLabel = r.apps.length ? r.apps[0][r.apps[0].length - 1] : '';
+    const prodLabel = r.products.length ? r.products[0].slice(0, 2).join(' \u203a ') : '';
+    return `
+    <div class="card${r.archived ? ' archived' : ''}">
+      <div class="card-top">
+        <div class="card-icon">${langIcon(r.lang)}</div>
+        <div class="card-title-wrap">
+          <div class="card-title" title="${escapeHtml(r.name)}">${escapeHtml(r.name)}</div>
+          <div class="card-org">${escapeHtml(r.full_name)}</div>
+        </div>
+      </div>
+      <div class="card-desc">${escapeHtml(r.desc)}</div>
+      <div class="card-tags">
+        ${appLabel ? `<span class="tag tag-app">${escapeHtml(appLabel)}</span>` : ''}
+        ${prodLabel ? `<span class="tag tag-product">${escapeHtml(prodLabel)}</span>` : ''}
+        ${r.lang ? `<span class="tag tag-lang">${escapeHtml(r.lang)}</span>` : ''}
+      </div>
+      <div class="card-footer">
+        <div class="card-meta">
+          <span>&#9733; ${r.stars}</span>
+          <span>&#x1F504; ${r.forks}</span>
+          <span>${relativeTime(r.updated)}</span>
+          ${r.archived ? '<span style="color:#b45309">Archived</span>' : ''}
+        </div>
+        <a href="${r.url}" target="_blank" rel="noopener" class="btn-github">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          View
+        </a>
+      </div>
+    </div>`;
+  }).join('');
+
+  const pag = document.getElementById('pagination');
+  if (totalPages <= 1) { pag.innerHTML = ''; return; }
+  pag.innerHTML = `
+    <button ${currentPage === 1 ? 'disabled' : ''} onclick="goPage(${currentPage - 1})">&laquo; Prev</button>
+    <span class="page-info">Page ${currentPage} of ${totalPages}</span>
+    <button ${currentPage === totalPages ? 'disabled' : ''} onclick="goPage(${currentPage + 1})">Next &raquo;</button>
+  `;
+}
+
+function goPage(p) { currentPage = p; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+
 function relativeTime(dateStr) {
-  const d = new Date(dateStr);
-  const now = new Date('2026-05-13');
-  const days = Math.round((now - d) / 86400000);
-  if (days === 0) return 'today';
-  if (days === 1) return 'yesterday';
-  if (days < 30)  return `${days}d ago`;
+  if (!dateStr) return '';
+  const days = Math.round((new Date() - new Date(dateStr)) / 86400000);
+  if (days <= 0) return 'today';
+  if (days < 30) return `${days}d ago`;
   if (days < 365) return `${Math.round(days/30)}mo ago`;
   return `${Math.round(days/365)}y ago`;
 }
 
-// ── RENDER RESULTS ────────────────────────────────────────────────────
-function render() {
-  renderChips();
-  const items = sorted(filtered());
-  const container = document.getElementById('results');
-  const count = items.length;
+function escapeHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
-  document.getElementById('headerCount').textContent = `${count} example${count !== 1 ? 's' : ''}`;
-  document.getElementById('resultLabel').innerHTML = `Showing <strong>${count}</strong> of ${repos.length} examples`;
-
-  if (count === 0) {
-    container.innerHTML = `
-      <div class="no-results">
-        <h3>No examples match</h3>
-        <p>Try adjusting your filters or search term.</p>
-      </div>`;
-    return;
-  }
-
-  container.innerHTML = items.map(r => `
-    <div class="card">
-      <div class="card-top">
-        <div class="card-icon">${r.icon}</div>
-        <div class="card-title-wrap">
-          <div class="card-title" title="${r.name}">${r.name}</div>
-          <div class="card-org">Infineon/${r.name}</div>
-        </div>
-      </div>
-      <div class="card-desc">${r.desc}</div>
-      <div class="card-tags">
-        <span class="tag tag-app">${r.app}</span>
-        <span class="tag tag-product">${r.product}</span>
-        <span class="tag tag-board">${r.board}</span>
-        <span class="tag tag-lang">${r.lang}</span>
-      </div>
-      <div class="card-footer">
-        <div class="card-meta">
-          <span>★ ${r.stars}</span>
-          <span>Updated ${relativeTime(r.updated)}</span>
-        </div>
-        <button class="btn-github">
-          <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor">
-            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
-            0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52
-            -.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64
-            -.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18
-            1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56
-            .82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2
-            0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
-          </svg>
-          View on GitHub
-        </button>
-      </div>
-    </div>
-  `).join('');
+function langIcon(lang) {
+  const m = {'C':'&#x1F1E8;','C++':'&#x2795;','Python':'&#x1F40D;','Java':'&#x2615;','JavaScript':'JS','TypeScript':'TS','Rust':'&#x1F980;','Makefile':'&#x1F527;'};
+  return m[lang] || '&#x1F4C1;';
 }
 
-// ── SEARCH ────────────────────────────────────────────────────────────
+// ── SEARCH ────────────────────────────────────────────
+let searchTimeout;
 document.getElementById('searchInput').addEventListener('input', e => {
-  searchQuery = e.target.value.trim();
-  render();
-  buildSidebar();
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    searchQuery = e.target.value.trim();
+    currentPage = 1;
+    render();
+  }, 200);
 });
 
-// ── INIT ──────────────────────────────────────────────────────────────
-buildSidebar();
-render();
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); document.getElementById('searchInput').focus(); }
+});
 </script>
 </body>
 </html>
