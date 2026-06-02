@@ -196,9 +196,23 @@ aside {
 .level-row select:focus { border-color: var(--green); }
 .level-row select:disabled { background: var(--bg); color: var(--text-lt); cursor: default; }
 
-/* Language checkboxes */
+/* Board filter */
+.board-search {
+  width: 100%;
+  font-size: 12px;
+  font-family: inherit;
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: white;
+  color: var(--text);
+  outline: none;
+  margin-bottom: 6px;
+}
+.board-search:focus { border-color: var(--green); }
+
 .filter-list { list-style: none; display: flex; flex-direction: column; gap: 1px; }
-.filter-list-scroll { max-height: 160px; overflow-y: auto; }
+.filter-list-scroll { max-height: 180px; overflow-y: auto; }
 
 .filter-item label {
   display: flex;
@@ -242,10 +256,16 @@ aside {
 }
 .filter-item input:checked + label { color: var(--green-dk); font-weight: 500; }
 
+.filter-count {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--text-lt);
+  font-weight: 400;
+}
+
 /* ── Main content ─────────────────────────────────── */
 main { padding: 20px 28px 40px; }
 
-/* Active filters row */
 .active-filters {
   display: flex;
   align-items: center;
@@ -292,7 +312,7 @@ main { padding: 20px 28px 40px; }
 }
 .clear-all:hover { color: var(--text); background: var(--bg); }
 
-/* Toolbar row */
+/* Toolbar */
 .toolbar {
   display: flex;
   align-items: center;
@@ -410,6 +430,7 @@ main { padding: 20px 28px 40px; }
 }
 .tag-app     { background: #eef2ff; color: #3730a3; }
 .tag-product { background: #fef3c7; color: #92400e; }
+.tag-board   { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
 .tag-lang    { background: var(--tag-bg); color: var(--text-mid); }
 
 .card-footer {
@@ -507,30 +528,9 @@ main { padding: 20px 28px 40px; }
 </header>
 
 <div class="page">
-  <!-- SIDEBAR -->
   <aside>
 
-    <!-- APPLICATION LEVELS -->
-    <div class="sidebar-section">
-      <div class="sidebar-label">
-        Application
-        <button id="clearApps" onclick="clearHierarchy('app')">Clear</button>
-      </div>
-      <div class="level-row">
-        <label>Level 1 — Segment</label>
-        <select id="app-l1" onchange="onLevelChange('app',1)"><option value="">All</option></select>
-      </div>
-      <div class="level-row">
-        <label>Level 2 — Sub-Application</label>
-        <select id="app-l2" onchange="onLevelChange('app',2)" disabled><option value="">All</option></select>
-      </div>
-      <div class="level-row">
-        <label>Level 3 — Function</label>
-        <select id="app-l3" onchange="onLevelChange('app',3)" disabled><option value="">All</option></select>
-      </div>
-    </div>
-
-    <!-- PRODUCT LEVELS -->
+    <!-- PRODUCT LEVELS (hierarchical) -->
     <div class="sidebar-section">
       <div class="sidebar-label">
         Product Family
@@ -554,6 +554,36 @@ main { padding: 20px 28px 40px; }
       </div>
     </div>
 
+    <!-- APPLICATION LEVELS (hierarchical) -->
+    <div class="sidebar-section">
+      <div class="sidebar-label">
+        Application
+        <button id="clearApps" onclick="clearHierarchy('app')">Clear</button>
+      </div>
+      <div class="level-row">
+        <label>Level 1 — Segment</label>
+        <select id="app-l1" onchange="onLevelChange('app',1)"><option value="">All</option></select>
+      </div>
+      <div class="level-row">
+        <label>Level 2 — Sub-Application</label>
+        <select id="app-l2" onchange="onLevelChange('app',2)" disabled><option value="">All</option></select>
+      </div>
+      <div class="level-row">
+        <label>Level 3 — Function</label>
+        <select id="app-l3" onchange="onLevelChange('app',3)" disabled><option value="">All</option></select>
+      </div>
+    </div>
+
+    <!-- BOARD / KIT -->
+    <div class="sidebar-section">
+      <div class="sidebar-label">
+        Board / Kit
+        <button id="clearBoard" onclick="clearBoard()">Clear</button>
+      </div>
+      <input type="text" class="board-search" id="boardSearch" placeholder="Search boards…" oninput="renderBoardList()">
+      <ul class="filter-list filter-list-scroll" id="filter-board"></ul>
+    </div>
+
     <!-- LANGUAGE -->
     <div class="sidebar-section">
       <div class="sidebar-label">
@@ -565,7 +595,6 @@ main { padding: 20px 28px 40px; }
 
   </aside>
 
-  <!-- MAIN -->
   <main>
     <div class="active-filters" id="activeFilters"></div>
     <div class="toolbar">
@@ -593,17 +622,29 @@ let repos = [];
 let currentPage = 1;
 const PAGE_SIZE = 30;
 
-// Hierarchical filter state: selected value at each level (null = all)
-let appFilter  = [null, null, null];       // 3 levels
-let prodFilter = [null, null, null, null]; // 4 levels
+let appFilter  = [null, null, null];
+let prodFilter = [null, null, null, null];
+let boardFilter = new Set();
 let langFilter = new Set();
 let searchQuery = "";
+
+// Board data
+let boardCounts = {};
+let boardList = [];
+
+// ── BOARD PATTERN ─────────────────────────────────────
+const BOARD_RE = /^(cy8c|cyw|kit[-_]|kp|cyble|cyw9|xmc|eval_)/i;
+
+function extractBoards(r) {
+  return r.topics.filter(t => BOARD_RE.test(t));
+}
 
 // ── LOAD DATA ─────────────────────────────────────────
 fetch('repos.json')
   .then(r => r.json())
   .then(data => {
     repos = data;
+    repos.forEach(r => { r._boards = extractBoards(r); });
     initFilters();
     render();
   })
@@ -652,16 +693,24 @@ function disableSelect(id) {
 
 // ── INIT FILTERS ──────────────────────────────────────
 function initFilters() {
-  populateSelect('app-l1', getUniqueAtLevel('apps', 0, []), null);
-  disableSelect('app-l2');
-  disableSelect('app-l3');
-
   populateSelect('prod-l1', getUniqueAtLevel('products', 0, []), null);
   disableSelect('prod-l2');
   disableSelect('prod-l3');
   disableSelect('prod-l4');
 
-  // Languages sorted by count
+  populateSelect('app-l1', getUniqueAtLevel('apps', 0, []), null);
+  disableSelect('app-l2');
+  disableSelect('app-l3');
+
+  // Build board counts
+  boardCounts = {};
+  repos.forEach(r => {
+    r._boards.forEach(b => { boardCounts[b] = (boardCounts[b] || 0) + 1; });
+  });
+  boardList = Object.keys(boardCounts).sort((a, b) => boardCounts[b] - boardCounts[a]);
+  renderBoardList();
+
+  // Languages
   const langCount = {};
   repos.forEach(r => { if (r.lang) langCount[r.lang] = (langCount[r.lang] || 0) + 1; });
   const langs = Object.keys(langCount).sort((a, b) => langCount[b] - langCount[a]);
@@ -675,7 +724,7 @@ function initFilters() {
       <input type="checkbox" id="${id}">
       <label for="${id}">
         <span class="checkmark"></span>
-        ${lang} <span style="margin-left:auto;font-size:10px;color:var(--text-lt)">${langCount[lang]}</span>
+        ${lang} <span class="filter-count">${langCount[lang]}</span>
       </label>
     `;
     li.querySelector('input').addEventListener('change', e => {
@@ -691,6 +740,35 @@ function initFilters() {
   updateClearButtons();
 }
 
+// ── BOARD LIST ────────────────────────────────────────
+function renderBoardList() {
+  const query = (document.getElementById('boardSearch').value || '').toLowerCase();
+  const ul = document.getElementById('filter-board');
+  ul.innerHTML = '';
+  const shown = boardList.filter(b => !query || b.includes(query)).slice(0, 40);
+  shown.forEach(board => {
+    const li = document.createElement('li');
+    li.className = 'filter-item';
+    const id = 'board_' + board.replace(/[^a-zA-Z0-9]/g, '_');
+    const checked = boardFilter.has(board);
+    li.innerHTML = `
+      <input type="checkbox" id="${id}" ${checked ? 'checked' : ''}>
+      <label for="${id}">
+        <span class="checkmark"></span>
+        ${board} <span class="filter-count">${boardCounts[board]}</span>
+      </label>
+    `;
+    li.querySelector('input').addEventListener('change', e => {
+      if (e.target.checked) boardFilter.add(board);
+      else boardFilter.delete(board);
+      currentPage = 1;
+      updateClearButtons();
+      render();
+    });
+    ul.appendChild(li);
+  });
+}
+
 // ── LEVEL CHANGE HANDLER ──────────────────────────────
 function onLevelChange(type, level) {
   const prefix = type === 'app' ? 'app' : 'prod';
@@ -702,13 +780,11 @@ function onLevelChange(type, level) {
   const val = sel.value || null;
   filter[level - 1] = val;
 
-  // Clear deeper levels
   for (let i = level; i < maxLevel; i++) {
     filter[i] = null;
     disableSelect(`${prefix}-l${i + 1}`);
   }
 
-  // Populate next level if a value was selected
   if (val && level < maxLevel) {
     const parentSel = filter.slice(0, level);
     const options = getUniqueAtLevel(field, level, parentSel);
@@ -740,6 +816,15 @@ function clearHierarchy(type) {
   render();
 }
 
+function clearBoard() {
+  boardFilter.clear();
+  document.getElementById('boardSearch').value = '';
+  renderBoardList();
+  currentPage = 1;
+  updateClearButtons();
+  render();
+}
+
 function clearLang() {
   langFilter.clear();
   document.querySelectorAll('#filter-lang input[type=checkbox]').forEach(cb => cb.checked = false);
@@ -749,8 +834,9 @@ function clearLang() {
 }
 
 function updateClearButtons() {
-  document.getElementById('clearApps').classList.toggle('visible', appFilter.some(v => v));
   document.getElementById('clearProducts').classList.toggle('visible', prodFilter.some(v => v));
+  document.getElementById('clearApps').classList.toggle('visible', appFilter.some(v => v));
+  document.getElementById('clearBoard').classList.toggle('visible', boardFilter.size > 0);
   document.getElementById('clearLang').classList.toggle('visible', langFilter.size > 0);
 }
 
@@ -760,17 +846,28 @@ function renderChips() {
   container.innerHTML = '';
   let total = 0;
 
+  const prodActive = prodFilter.filter(v => v);
+  if (prodActive.length) {
+    total++;
+    container.appendChild(makeChip('Product', prodActive.join(' \u203a '), () => clearHierarchy('prod')));
+  }
+
   const appActive = appFilter.filter(v => v);
   if (appActive.length) {
     total++;
     container.appendChild(makeChip('App', appActive.join(' \u203a '), () => clearHierarchy('app')));
   }
 
-  const prodActive = prodFilter.filter(v => v);
-  if (prodActive.length) {
+  boardFilter.forEach(board => {
     total++;
-    container.appendChild(makeChip('Product', prodActive.join(' \u203a '), () => clearHierarchy('prod')));
-  }
+    container.appendChild(makeChip('Board', board, () => {
+      boardFilter.delete(board);
+      renderBoardList();
+      currentPage = 1;
+      updateClearButtons();
+      render();
+    }));
+  });
 
   langFilter.forEach(lang => {
     total++;
@@ -801,6 +898,7 @@ function renderChips() {
     btn.addEventListener('click', () => {
       clearHierarchy('app');
       clearHierarchy('prod');
+      clearBoard();
       clearLang();
       searchQuery = '';
       document.getElementById('searchInput').value = '';
@@ -832,8 +930,12 @@ function filtered() {
   const hideArch = document.getElementById('hideArchived').checked;
   return repos.filter(r => {
     if (hideArch && r.archived) return false;
-    if (!matchesHierarchy(r.apps, appFilter)) return false;
     if (!matchesHierarchy(r.products, prodFilter)) return false;
+    if (!matchesHierarchy(r.apps, appFilter)) return false;
+    if (boardFilter.size > 0) {
+      const hasBoard = r._boards.some(b => boardFilter.has(b));
+      if (!hasBoard) return false;
+    }
     if (langFilter.size > 0 && !langFilter.has(r.lang)) return false;
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
@@ -880,6 +982,7 @@ function render() {
   container.innerHTML = pageItems.map(r => {
     const appLabel = r.apps.length ? r.apps[0][r.apps[0].length - 1] : '';
     const prodLabel = r.products.length ? r.products[0].slice(0, 2).join(' \u203a ') : '';
+    const boardTags = r._boards.slice(0, 2).map(b => `<span class="tag tag-board">${escapeHtml(b)}</span>`).join('');
     return `
     <div class="card${r.archived ? ' archived' : ''}">
       <div class="card-top">
@@ -893,6 +996,7 @@ function render() {
       <div class="card-tags">
         ${appLabel ? `<span class="tag tag-app">${escapeHtml(appLabel)}</span>` : ''}
         ${prodLabel ? `<span class="tag tag-product">${escapeHtml(prodLabel)}</span>` : ''}
+        ${boardTags}
         ${r.lang ? `<span class="tag tag-lang">${escapeHtml(r.lang)}</span>` : ''}
       </div>
       <div class="card-footer">
